@@ -3,7 +3,7 @@
 const Game = {
     letter_number: 1,  // Controla a posição da letra na linha atual (1 a 5)
     row_number: 1,     // Controla qual linha do tabuleiro está sendo preenchida (1 a 6)
-    palavra: "",       // Palavra secreta que o jogador precisa adivinhar
+    word: "",       // Palavra secreta que o jogador precisa adivinhar
     board: document.querySelector(".board-game"), // Referência ao tabuleiro do jogo
     keyboard: document.querySelector(".keyboard"),
 
@@ -60,33 +60,33 @@ function test_word() {
     if (Game.letter_number === 6) { 
         
         const row = Game.board.querySelector(`.row.row-${Game.row_number}`);
-        let acertos = 0; // Contador de letras corretas na posição certa
+        let hits = 0; // Contador de letras corretas na posição certa
 
         for (let i = 0; i < 5; i++) {
 
             const letter = row.querySelector(`.letter.letter-${i + 1}`); // Pega cada letra da linha
-            const letraDigitada = letter.textContent.toUpperCase(); // Letra inserida pelo jogador
-            const letraCorreta = Game.palavra[i].toUpperCase(); // Letra correta da palavra secreta
+            const typed_letter = letter.textContent.toUpperCase(); // Letra inserida pelo jogador
+            const correct_letter = Game.word[i].toUpperCase(); // Letra correta da palavra secreta
 
-            const marcar_letra = Game.keyboard.querySelector(`.letter.letter-${letraDigitada}`);
+            const paint_letter = Game.keyboard.querySelector(`.letter.letter-${typed_letter}`);
 
-            if (letraDigitada === letraCorreta) { // Letra correta e na posição correta
+            if (typed_letter === correct_letter) { // Letra correta e na posição correta
                 
-                acertos++;
+                hits++;
                 letter.style.backgroundColor = "var(--letter-green-bg)";
-                marcar_letra.style.backgroundColor = "var(--letter-green-bg)";
-            } else if (Game.palavra.toUpperCase().includes(letraDigitada)) { // Letra existe na palavra, mas na posição errada
+                paint_letter.style.backgroundColor = "var(--letter-green-bg)";
+            } else if (Game.word.toUpperCase().includes(typed_letter)) { // Letra existe na palavra, mas na posição errada
                 
                 letter.style.backgroundColor = "var(--letter-yellow-bg)";
-                marcar_letra.style.backgroundColor = "var(--letter-yellow-bg)";
-            } else {// Letra não existe na palavra
+                paint_letter.style.backgroundColor = "var(--letter-yellow-bg)";
+            } else { // Letra não existe na palavra
                 
                 letter.style.backgroundColor = "var(--letter-gray-bg)";
-                marcar_letra.style.backgroundColor = "var(--letter-gray-bg)";
+                paint_letter.style.backgroundColor = "var(--letter-gray-bg)";
             }
         }
 
-        if (acertos === 5) {
+        if (hits === 5) {
 
             Toastify({
                 text: "🎉 Parabéns! Você ganhou!",
@@ -95,6 +95,8 @@ function test_word() {
                 position: "center", // left, center ou right
                 backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
                 }).showToast();
+            
+            document.querySelector(".btn-play-again").style.display = "block";
 
             return;
         }
@@ -104,13 +106,40 @@ function test_word() {
 
     if (Game.row_number > 6) {
         Toastify({
-            text: `💀 Você perdeu o jogo! A palavra era ${Game.palavra}`,
+            text: `💀 Você perdeu o jogo! A palavra era ${Game.word}`,
             duration: 3000,
             gravity: "top",
             position: "center",
             backgroundColor: "#ff4d4d",
         }).showToast();
+
+        document.querySelector(".btn-play-again").style.display = "block";
     }
+}
+
+// Função para voltar as cores de fundo padrão e tirar os blocos preenchidos
+function reset_colors() {
+
+    // Reseta as cores do teclado
+    Game.keyboard.querySelectorAll(".letter").forEach(btn => {
+        btn.style.backgroundColor = "var(--keyboard-gray-light)";
+    });
+    
+    // Reseta os blocos das letras
+    Game.board.querySelectorAll(".letter").forEach(bnt => {
+        bnt.style.backgroundColor = "var(--bg)";
+        bnt.textContent = "";
+    });
+}
+
+// Função para reiniciar o jogo
+function reset_game() {
+
+    // Atribui os valores padrão para letter_number e row_number
+    Game.letter_number = 1;
+    Game.row_number = 1;
+    reset_colors();
+    start(); // Começa o jogo novamente
 }
 
 // Adiciona os ouvintes de eventos para o teclado virtual e botões de ação
@@ -126,13 +155,17 @@ function setupEventListeners() {
 
     // Botão de "Apagar" (remove última letra)
     document.querySelector(".action.erase").addEventListener("click", delete_letter);
+
+    // Botão para reiniciar o jogo
+    document.querySelector(".btn-play-again").addEventListener("click", reset_game);
 }
 
 // Função principal para iniciar o jogo
 async function start() {
 
+    document.querySelector(".btn-play-again").style.display = "none";
     const database = await fetch_words(); // Carrega as palavras
-    Game.palavra = get_random_word(database); // Escolhe uma aleatória
+    Game.word = get_random_word(database); // Escolhe uma aleatória
     setupEventListeners(); // Ativa os eventos de teclado e botões
 }
 
