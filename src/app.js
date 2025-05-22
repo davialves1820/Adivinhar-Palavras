@@ -5,6 +5,7 @@ const Game = {
     row_number: 1,     // Controla qual linha do tabuleiro está sendo preenchida (1 a 6)
     palavra: "",       // Palavra secreta que o jogador precisa adivinhar
     board: document.querySelector(".board-game"), // Referência ao tabuleiro do jogo
+    keyboard: document.querySelector(".keyboard"),
 
     // Reinicia a posição da letra e avança para a próxima linha após tentativa
     resetLine() {
@@ -67,16 +68,21 @@ function test_word() {
             const letraDigitada = letter.textContent.toUpperCase(); // Letra inserida pelo jogador
             const letraCorreta = Game.palavra[i].toUpperCase(); // Letra correta da palavra secreta
 
+            const marcar_letra = Game.keyboard.querySelector(`.letter.letter-${letraDigitada}`);
+
             if (letraDigitada === letraCorreta) { // Letra correta e na posição correta
                 
                 acertos++;
                 letter.style.backgroundColor = "var(--letter-green-bg)";
+                marcar_letra.style.backgroundColor = "var(--letter-green-bg)";
             } else if (Game.palavra.toUpperCase().includes(letraDigitada)) { // Letra existe na palavra, mas na posição errada
                 
                 letter.style.backgroundColor = "var(--letter-yellow-bg)";
+                marcar_letra.style.backgroundColor = "var(--letter-yellow-bg)";
             } else {// Letra não existe na palavra
                 
                 letter.style.backgroundColor = "var(--letter-gray-bg)";
+                marcar_letra.style.backgroundColor = "var(--letter-gray-bg)";
             }
         }
 
