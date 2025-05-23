@@ -52,3 +52,5 @@ Um jogo interativo no navegador onde o jogador deve adivinhar uma palavra secret
 ## 🖼️ Pré-visualização
 
 ![image](https://github.com/user-attachments/assets/59dd422d-17c1-4cee-9f8f-39ad440602be)
+
+---
