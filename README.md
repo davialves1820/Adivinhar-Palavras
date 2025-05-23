@@ -29,12 +29,12 @@ Um jogo interativo no navegador onde o jogador deve adivinhar uma palavra secret
 
 ## 📁 Estrutura de arquivos
 
-**index.html**;
-**style.css**;
-**src/:**
-- **main.js:** Arquivo principal do jogo;
-- **game.js:** Objeto central que armazena estado do jogo;
-- **board_manager.js:** Manipula o tabuleiro;
-- **word_manager.js:** Carrega palavras e valida tentativas;
-- **event_handlers.js:** Eventos do teclado virtual;
-- **banco_palavras.json:** Banco de palavras possíveis.
+- **index.html**;
+- **style.css**;
+- **src/:**
+  - **main.js:** Arquivo principal do jogo;
+  - **game.js:** Objeto central que armazena estado do jogo;
+  - **board_manager.js:** Manipula o tabuleiro;
+  - **word_manager.js:** Carrega palavras e valida tentativas;
+  - **event_handlers.js:** Eventos do teclado virtual;
+  - **banco_palavras.json:** Banco de palavras possíveis.
